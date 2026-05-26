@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Gold Shield Vault | Premier Asset Custody</title>
+    <title>Gold Shield Vault | Mobile Estate Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -19,37 +19,37 @@
             --gold-light: #f3e5ab;
             --dark-bg: #0a0c12;
             --darker: #05070c;
-            --card-bg: rgba(15, 18, 25, 0.88);
+            --card-bg: rgba(15, 18, 25, 0.92);
             --text-light: #ffffff;
             --text-muted: #b0b7ca;
             --border-glow: rgba(212, 175, 55, 0.28);
-            --sidebar-width: 280px;
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background: radial-gradient(circle at top, #111419 0%, #05070c 65%, #020305 100%);
+            font-family: -apple-system, 'Inter', 'Segoe UI', system-ui, Helvetica, sans-serif;
+            background: radial-gradient(circle at top, #111419 0%, #05070c 100%);
             color: var(--text-light);
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* Mobile-first container */
-        .mobile-container {
-            max-width: 100%;
+        /* Mobile App Container */
+        .app-shell {
+            max-width: 500px;
             margin: 0 auto;
-            position: relative;
-            background: rgba(5, 7, 12, 0.4);
+            background: rgba(5, 7, 12, 0.85);
             min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
         }
 
-        /* Landing Page Styles */
+        /* Animated Background */
         .hero-bg {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
             z-index: -2;
             background: radial-gradient(circle at 20% 30%, #11161f, #05070c);
         }
@@ -57,12 +57,12 @@
         .hero-bg::before {
             content: '';
             position: absolute;
-            width: 180%;
-            height: 180%;
-            top: -40%;
-            left: -40%;
-            background: radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%);
-            animation: rotate 40s linear infinite;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
         }
 
         @keyframes rotate {
@@ -82,220 +82,179 @@
 
         .particle {
             position: absolute;
-            background: rgba(212, 175, 55, 0.25);
+            background: rgba(212, 175, 55, 0.2);
             border-radius: 50%;
-            animation: float 15s infinite ease-in-out;
+            animation: float 12s infinite ease-in-out;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
-            100% { transform: translateY(-100vh) translateX(80px); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
         }
 
-        /* Auto-hiding Navbar */
-        .navbar {
+        /* Top Header */
+        .app-header {
+            padding: 18px 16px 12px;
+            background: rgba(5, 7, 12, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glow);
             position: sticky;
             top: 0;
+            z-index: 100;
+        }
+
+        .header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.25rem;
-            z-index: 1000;
-            background: rgba(7, 10, 16, 0.96);
-            backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(212,175,55,0.15);
-            transition: transform 0.25s ease;
         }
 
-        .navbar.navbar-hidden {
-            transform: translateY(-100%);
-        }
-
-        .navbar-reveal-zone {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            z-index: 999;
-            pointer-events: auto;
-        }
-
-        .logo h2 {
-            font-size: 1.4rem;
+        .logo-area h1 {
+            font-size: 1.3rem;
             background: linear-gradient(135deg, var(--gold-light), var(--gold));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
-        .logo p {
-            font-size: 0.65rem;
+        .logo-area p {
+            font-size: 0.55rem;
             color: var(--text-muted);
         }
 
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-toggle {
-            display: none;
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 0.6rem 1rem;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-
-        .btn-login {
+        .btn-login-small {
             background: transparent;
             border: 1.5px solid var(--gold);
-            padding: 0.5rem 1.5rem;
+            padding: 6px 16px;
             border-radius: 40px;
             color: var(--gold);
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.75rem;
             cursor: pointer;
-            transition: all 0.3s;
         }
 
-        .hero {
-            min-height: 85vh;
+        /* Scroll Content */
+        .scroll-content {
+            padding: 16px 16px 90px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Cards */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 1.2rem;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            color: var(--gold);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 4rem 1.5rem;
+            gap: 8px;
         }
 
-        .hero-content h1 {
-            font-size: 2.8rem;
+        .hero-section {
+            text-align: center;
+            padding: 40px 16px;
+        }
+
+        .hero-section h2 {
+            font-size: 1.8rem;
             background: linear-gradient(135deg, #fff, var(--gold));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 1rem;
+            margin-bottom: 10px;
         }
 
-        .hero-content p {
+        .hero-section p {
             color: var(--text-muted);
-            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
         }
 
         .btn-gold {
             background: linear-gradient(135deg, var(--gold-dark), var(--gold));
             border: none;
-            padding: 0.9rem 2rem;
-            border-radius: 50px;
+            padding: 12px 24px;
+            border-radius: 60px;
             font-weight: bold;
             color: #0a0c12;
             cursor: pointer;
+            font-size: 0.85rem;
         }
 
-        .section {
-            padding: 4rem 5%;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            width: 70px;
-            height: 3px;
-            background: var(--gold);
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .about-grid, .services-grid, .blog-grid {
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
-        .about-card, .service-card, .blog-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-glow);
-            border-radius: 28px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto;
+        .stat-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 18px;
+            padding: 12px;
             text-align: center;
         }
 
-        .stat-item h3 {
-            font-size: 2rem;
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
             color: var(--gold);
         }
 
-        .contact-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
+        .service-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 18px;
+            padding: 14px;
+            text-align: center;
+            margin-bottom: 0;
         }
 
-        .contact-info, .contact-form {
-            background: var(--card-bg);
-            border-radius: 28px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-glow);
+        .service-item i {
+            font-size: 1.6rem;
+            color: var(--gold);
+            margin-bottom: 6px;
         }
 
-        .contact-form input, .contact-form textarea {
-            width: 100%;
-            padding: 0.9rem;
-            margin-bottom: 1rem;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--border-glow);
-            border-radius: 16px;
-            color: white;
+        .blog-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
 
-        .footer {
-            background: rgba(5, 7, 12, 0.95);
-            padding: 2rem 5%;
-            border-top: 1px solid var(--border-glow);
+        .blog-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(212,175,55,0.15);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Dashboard Sidebar - Mobile Optimized with Auto-hide */
+        .contact-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+        }
+
+        /* Dashboard Sidebar - Mobile Optimized */
         .dashboard-wrapper {
             display: flex;
             min-height: 100vh;
@@ -303,9 +262,9 @@
         }
 
         .sidebar {
-            width: var(--sidebar-width);
+            width: 280px;
             background: rgba(6, 9, 16, 0.98);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
             border-right: 1px solid var(--border-glow);
             display: flex;
             flex-direction: column;
@@ -314,7 +273,7 @@
             left: 0;
             height: 100vh;
             z-index: 1000;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             overflow-y: auto;
         }
 
@@ -322,19 +281,11 @@
             transform: translateX(-100%);
         }
 
-        .sidebar:not(.closed) {
-            transform: translateX(0);
-        }
-
         .main-content {
             flex: 1;
-            margin-left: var(--sidebar-width);
-            transition: margin-left 0.3s ease;
-            padding: 20px 20px 80px;
-        }
-
-        body.sidebar-closed .main-content {
             margin-left: 0;
+            padding: 16px 16px 80px;
+            width: 100%;
         }
 
         .menu-toggle-open {
@@ -344,7 +295,7 @@
             background: linear-gradient(135deg, var(--gold-dark), var(--gold));
             border: none;
             border-radius: 50px;
-            padding: 14px 20px;
+            padding: 12px 20px;
             color: #0a0c12;
             font-weight: bold;
             z-index: 990;
@@ -352,7 +303,7 @@
             cursor: pointer;
             gap: 8px;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         body.sidebar-closed .menu-toggle-open {
@@ -382,6 +333,7 @@
             text-decoration: none;
             transition: all 0.2s;
             cursor: pointer;
+            font-size: 0.85rem;
         }
 
         .sidebar-nav a:hover, .sidebar-nav li.active a {
@@ -390,90 +342,138 @@
             border-left: 3px solid var(--gold);
         }
 
-        .glass-panel {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-glow);
-            border-radius: 24px;
-            padding: 1.2rem;
-            margin-bottom: 20px;
-        }
-
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .info-card {
-            background: rgba(0,0,0,0.3);
-            border-radius: 18px;
-            padding: 0.9rem;
+            background: rgba(0,0,0,0.35);
+            border-radius: 16px;
+            padding: 10px;
             border-left: 3px solid var(--gold);
         }
 
         .info-label {
             color: var(--gold);
-            font-size: 0.65rem;
-            letter-spacing: 1px;
+            font-size: 0.55rem;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
         }
 
         .info-value {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
             margin-top: 4px;
+            word-break: break-word;
         }
 
-        .video-grid, .doc-grid {
+        .media-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
-        .video-card, .doc-card {
+        .media-card {
             background: rgba(0,0,0,0.4);
-            border-radius: 20px;
+            border-radius: 18px;
             overflow: hidden;
             cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid var(--border-glow);
+            text-align: center;
+            padding: 12px;
         }
 
-        .video-thumb {
-            height: 140px;
-            background: linear-gradient(135deg, #1a1f2e, #0f121c);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .video-thumb i {
-            font-size: 2.5rem;
+        .media-card i {
+            font-size: 2rem;
             color: var(--gold);
         }
 
-        .modal {
+        .payment-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Video Modal */
+        .video-modal {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.96);
             z-index: 2100;
             display: none;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
-        .modal-content {
+        .video-modal-content {
             background: #0a0c12;
             border-radius: 28px;
-            width: 90%;
-            max-width: 600px;
-            padding: 20px;
+            width: 100%;
+            max-width: 450px;
+            padding: 16px;
             border: 2px solid var(--gold);
+        }
+
+        .video-modal-content video {
+            width: 100%;
+            border-radius: 20px;
+            max-height: 500px;
+        }
+
+        /* Document Viewer Modal */
+        .doc-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.96);
+            z-index: 2100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .doc-modal-content {
+            background: #0a0c12;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 450px;
+            padding: 16px;
+            border: 2px solid var(--gold);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .doc-preview {
+            background: #1a1f2e;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 12px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            white-space: pre-wrap;
+            color: #ccc;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .login-overlay {
@@ -487,16 +487,17 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
+            z-index: 2000;
+            padding: 20px;
         }
 
         .login-card {
             background: rgba(10,12,20,0.98);
             border: 1px solid var(--gold);
             border-radius: 48px;
-            padding: 35px 25px;
-            width: 400px;
-            max-width: 90%;
+            padding: 32px 24px;
+            width: 100%;
+            max-width: 340px;
             text-align: center;
         }
 
@@ -510,174 +511,102 @@
             color: white;
         }
 
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .progress-bar {
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--gold);
-            border-radius: 10px;
-            width: 78%;
-        }
-
-        .payment-item {
-            background: rgba(0,0,0,0.3);
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .bottom-nav {
-            display: none;
-            position: sticky;
-            bottom: 0;
-            background: rgba(6, 9, 16, 0.98);
-            border-top: 1px solid var(--border-glow);
-            backdrop-filter: blur(20px);
-            padding: 10px;
-            z-index: 100;
-        }
-
-        .bottom-nav button {
-            flex: 1;
-            background: transparent;
-            border: none;
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.65rem;
             color: var(--text-muted);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.7rem;
+            border-top: 1px solid var(--border-glow);
+            margin-top: 20px;
         }
 
-        @media (max-width: 768px) {
-            .nav-toggle { display: inline-flex; }
-            .nav-links { display: none; flex-direction: column; width: 100%; background: rgba(5,7,12,0.98); border-radius: 20px; padding: 1rem; margin-top: 0.5rem; }
-            .nav-links.show { display: flex; }
-            .hero-content h1 { font-size: 2rem; }
-            .contact-wrapper { grid-template-columns: 1fr; }
-            .sidebar { width: 85%; max-width: 280px; }
-            .main-content { margin-left: 0; padding: 16px; }
-            .menu-toggle-open { bottom: 20px; left: 20px; padding: 12px 18px; }
-            .info-grid { grid-template-columns: 1fr; }
+        @media (max-width: 480px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .media-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-section h2 {
+                font-size: 1.5rem;
+            }
+            .stats-grid {
+                gap: 8px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="mobile-container">
+<div class="app-shell">
     <div class="hero-bg"></div>
     <div class="particles" id="particles"></div>
-    <div class="navbar-reveal-zone" id="navbarRevealZone"></div>
 
     <!-- LANDING PAGE -->
-    <div id="landingPage">
-        <nav class="navbar" id="mainNavbar">
-            <div class="logo"><h2><i class="fas fa-shield-alt"></i> GOLD SHIELD</h2><p>Premier Asset Custody Since 1989</p></div>
-            <button class="nav-toggle" id="navToggleBtn"><i class="fas fa-bars"></i> Menu</button>
-            <div class="nav-links" id="navLinks">
-                <a onclick="scrollToSection('home')">Home</a>
-                <a onclick="scrollToSection('about')">About</a>
-                <a onclick="scrollToSection('services')">Services</a>
-                <a onclick="scrollToSection('blog')">Insights</a>
-                <a onclick="scrollToSection('contact')">Contact</a>
-                <button class="btn-login" id="showLoginBtn"><i class="fas fa-key"></i> Client Portal</button>
+    <div id="landingContent">
+        <div class="app-header">
+            <div class="header-row">
+                <div class="logo-area">
+                    <h1><i class="fas fa-shield-alt"></i> GOLD SHIELD</h1>
+                    <p>Premier Asset Custody Since 1989</p>
+                </div>
+                <button class="btn-login-small" id="showLoginBtn"><i class="fas fa-key"></i> Login</button>
             </div>
-        </nav>
+        </div>
 
-        <section id="home" class="hero">
-            <div class="hero-content">
-                <h1>Fortress-Grade Asset Protection</h1>
-                <p>9.5 Tons Gold Custody · Swiss Vault Technology · Since 1989</p>
-                <button class="btn-gold" onclick="scrollToSection('contact')">Schedule Consultation</button>
+        <div class="scroll-content">
+            <div class="hero-section">
+                <h2>Fortress-Grade<br>Asset Protection</h2>
+                <p>9.5 Tons Gold Custody · Swiss Vault Technology</p>
+                <button class="btn-gold" onclick="document.getElementById('servicesSec').scrollIntoView({behavior:'smooth'})">Explore Services</button>
             </div>
-        </section>
 
-        <section id="about" class="section">
-            <h2 class="section-title">The Gold Standard</h2>
-            <div class="about-grid">
-                <div class="about-card"><i class="fas fa-vault" style="font-size:2.5rem; color:var(--gold);"></i><h3>Nuclear-Grade Vaults</h3><p>Seismic isolation, EMP shielding, 24/7 armed response.</p></div>
-                <div class="about-card"><i class="fas fa-link" style="font-size:2.5rem; color:var(--gold);"></i><h3>Blockchain Provenance</h3><p>Immutable audit trails with quantum encryption.</p></div>
-                <div class="about-card"><i class="fas fa-hand-holding-usd" style="font-size:2.5rem; color:var(--gold);"></i><h3>Full Insurance</h3><p>Lloyd's underwritten up to $500M per depositor.</p></div>
+            <div class="glass-card">
+                <div class="section-title"><i class="fas fa-chart-line"></i> Key Metrics</div>
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-number">$2.8B+</div><div class="stat-label">Assets Under Custody</div></div>
+                    <div class="stat-card"><div class="stat-number">147+</div><div class="stat-label">Institutional Clients</div></div>
+                    <div class="stat-card"><div class="stat-number">99.99%</div><div class="stat-label">Audit Accuracy</div></div>
+                    <div class="stat-card"><div class="stat-number">35+</div><div class="stat-label">Years Excellence</div></div>
+                </div>
             </div>
-        </section>
 
-        <section id="services" class="section">
-            <h2 class="section-title">Our Services</h2>
-            <div class="services-grid">
-                <div class="service-card"><i class="fas fa-gem" style="font-size:2.5rem; color:var(--gold);"></i><h3>Precious Metals</h3><p>Gold, silver, platinum, diamond storage.</p></div>
-                <div class="service-card"><i class="fas fa-file-contract" style="font-size:2.5rem; color:var(--gold);"></i><h3>Legal Safekeeping</h3><p>Wills, deeds, corporate records.</p></div>
-                <div class="service-card"><i class="fas fa-chart-line" style="font-size:2.5rem; color:var(--gold);"></i><h3>Asset Auditing</h3><p>3rd party verification.</p></div>
+            <div class="glass-card" id="servicesSec">
+                <div class="section-title"><i class="fas fa-gem"></i> Our Services</div>
+                <div class="stats-grid">
+                    <div class="service-item"><i class="fas fa-gold"></i><div><strong>Precious Metals</strong><br><span style="font-size:0.7rem;">Gold, Silver, Diamond</span></div></div>
+                    <div class="service-item"><i class="fas fa-file-contract"></i><div><strong>Legal Safekeeping</strong><br><span style="font-size:0.7rem;">Wills, Deeds</span></div></div>
+                    <div class="service-item"><i class="fas fa-chart-line"></i><div><strong>Asset Auditing</strong><br><span style="font-size:0.7rem;">3rd Party Verified</span></div></div>
+                    <div class="service-item"><i class="fas fa-globe"></i><div><strong>Global Depository</strong><br><span style="font-size:0.7rem;">Zürich, Singapore</span></div></div>
+                </div>
             </div>
-        </section>
 
-        <section class="section" style="padding-top:0">
-            <div class="stats-container">
-                <div class="stat-item"><h3>$2.8B+</h3><p>Assets Under Custody</p></div>
-                <div class="stat-item"><h3>147+</h3><p>Institutional Clients</p></div>
-                <div class="stat-item"><h3>99.99%</h3><p>Audit Accuracy</p></div>
+            <div class="glass-card">
+                <div class="section-title"><i class="fas fa-newspaper"></i> Insights</div>
+                <div class="blog-card"><div class="blog-icon"><i class="fas fa-chart-line"></i></div><div><strong>Gold Demand Hits Decade High</strong><br><span style="font-size:0.7rem;">Central bank buying surges</span></div></div>
+                <div class="blog-card"><div class="blog-icon"><i class="fas fa-shield-virus"></i></div><div><strong>Quantum-Resistant Security</strong><br><span style="font-size:0.7rem;">Future-proofing assets</span></div></div>
             </div>
-        </section>
 
-        <section id="blog" class="section">
-            <h2 class="section-title">Insights</h2>
-            <div class="blog-grid">
-                <div class="blog-card"><div class="video-thumb"><i class="fas fa-chart-line"></i></div><h3>Gold Demand Hits High</h3><button class="btn-outline" style="margin-top:10px; background:transparent; border:1px solid var(--gold); padding:6px 12px; border-radius:30px; color:var(--gold);" onclick="alert('Full article available after login.')">Read</button></div>
-                <div class="blog-card"><div class="video-thumb"><i class="fas fa-shield-virus"></i></div><h3>Quantum Security</h3><button class="btn-outline" style="margin-top:10px; background:transparent; border:1px solid var(--gold); padding:6px 12px; border-radius:30px; color:var(--gold);" onclick="alert('Full article available after login.')">Read</button></div>
+            <div class="glass-card">
+                <div class="section-title"><i class="fas fa-phone-alt"></i> Contact</div>
+                <div class="contact-row"><i class="fas fa-map-pin"></i> Bahnhofstrasse 9, 8001 Zürich</div>
+                <div class="contact-row"><i class="fas fa-envelope"></i> concierge@goldshieldvault.com</div>
+                <div class="contact-row"><i class="fas fa-phone"></i> +41 44 555 8812</div>
+                <button class="btn-gold" style="width:100%; margin-top:12px;" onclick="alert('Consultation request sent.')">Request Consultation</button>
             </div>
-        </section>
 
-        <section id="contact" class="section">
-            <h2 class="section-title">Contact</h2>
-            <div class="contact-wrapper">
-                <div class="contact-info"><h3><i class="fas fa-map-pin"></i> Zürich HQ</h3><p>Bahnhofstrasse 9, 8001 Zürich</p><p>concierge@goldshieldvault.com</p><p>+41 44 555 8812</p></div>
-                <div class="contact-form"><h3>Secure Message</h3><input placeholder="Name"><input placeholder="Email"><textarea rows="3" placeholder="Message"></textarea><button class="btn-gold" onclick="alert('Message sent. Specialist will respond.')">Send</button></div>
+            <div class="footer">
+                <p>© 2026 Gold Shield Vault AG | FINMA Regulated</p>
             </div>
-        </section>
-
-        <footer class="footer"><div class="footer-grid"><div><h3>Gold Shield Vault</h3><p>Est. 1989 | Swiss License</p></div></div><div style="text-align:center; margin-top:1rem;"><p>© 2026 Gold Shield Vault AG</p></div></footer>
-        <div class="bottom-nav"><button onclick="scrollToSection('home')"><i class="fas fa-home"></i>Home</button><button onclick="scrollToSection('services')"><i class="fas fa-briefcase"></i>Services</button><button onclick="scrollToSection('contact')"><i class="fas fa-envelope"></i>Contact</button></div>
-    </div>
-
-    <!-- LOGIN MODAL -->
-    <div id="loginOverlay" class="login-overlay">
-        <div class="login-card">
-            <i class="fas fa-shield-alt" style="font-size:2.5rem; color:var(--gold);"></i>
-            <h2>Estate Access</h2>
-            <p>William Johnson · Secure Login</p>
-            <input type="text" id="loginUser" placeholder="Client ID / Email">
-            <input type="password" id="loginPass" placeholder="Access Code">
-            <button class="btn-gold" id="doLoginBtn" style="width:100%;">ACCESS VAULT</button>
-            <div id="loginError" style="color:#e07c4c; font-size:0.8rem; margin-top:8px;"></div>
-            <div style="background:rgba(212,175,55,0.1); border-radius:12px; padding:10px; margin-top:15px; font-size:0.7rem;">
-                <strong>Demo Credentials:</strong><br>
-                <code>william.johnson@estate.com</code><br>
-                <code>William1990</code>
-            </div>
-            <button id="closeLoginModalBtn" style="background:none; border:none; color:var(--text-muted); margin-top:12px;">Cancel</button>
         </div>
     </div>
 
     <!-- DASHBOARD -->
-    <div id="dashboardMain" style="display: none;">
+    <div id="dashboardContent" style="display: none;">
         <div class="dashboard-wrapper">
             <aside class="sidebar" id="dashboardSidebar">
                 <div style="display:flex; justify-content:space-between; padding:20px; border-bottom:1px solid var(--border-glow);">
                     <div><h2 style="font-size:1.2rem;"><i class="fas fa-crown"></i> GOLD SHIELD</h2><p style="font-size:0.6rem;">ESTATE CUSTODY</p></div>
-                    <button class="close-sidebar-btn" id="closeSidebarBtn" style="background:rgba(255,255,255,0.05); border:1px solid var(--border-glow); color:var(--gold); width:32px; height:32px; border-radius:50%; cursor:pointer;"><i class="fas fa-times"></i></button>
+                    <button id="closeSidebarBtn" style="background:rgba(255,255,255,0.05); border:1px solid var(--border-glow); color:var(--gold); width:32px; height:32px; border-radius:50%; cursor:pointer;"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="sidebar-nav">
                     <ul>
@@ -694,22 +623,92 @@
             </aside>
             <button class="menu-toggle-open" id="openSidebarBtn"><i class="fas fa-bars"></i> MENU</button>
             <main class="main-content">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap;">
-                    <div><h2>WILLIAM JOHNSON ESTATE</h2><span style="color:var(--text-muted); font-size:0.7rem;"><i class="fas fa-check-circle" style="color:var(--gold);"></i> Active Custody</span></div>
-                    <div style="display:flex; gap:10px; background:rgba(0,0,0,0.45); padding:6px 18px; border-radius:40px;"><div><h5 id="displayClientName">William Johnson</h5><span style="font-size:0.7rem;">Native American</span></div><i class="fas fa-user-tie" style="font-size:1.8rem; color:var(--gold);"></i></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+                    <div><h2 style="font-size:1.3rem;">WILLIAM JOHNSON</h2><span style="color:var(--text-muted); font-size:0.7rem;"><i class="fas fa-check-circle" style="color:var(--gold);"></i> Active Custody</span></div>
+                    <div style="display:flex; gap:8px; background:rgba(0,0,0,0.45); padding:6px 14px; border-radius:40px;"><div><h5 id="displayClientName">William Johnson</h5><span style="font-size:0.65rem;">Native American</span></div><i class="fas fa-user-tie" style="font-size:1.5rem; color:var(--gold);"></i></div>
                 </div>
-                <div id="dashboardTab" class="tab-content active"><div class="info-grid" id="dashboardInfo"></div><div class="glass-panel"><h3 style="color:var(--gold);">OFFICIAL REMARKS</h3><p id="remarksText" style="font-size:0.85rem;"></p><p style="margin-top:10px;"><strong>Received with full proof of ownership.</strong><br>Director: MR-DAVIS CONOR</p></div></div>
-                <div id="analyticsTab" class="tab-content"><div class="glass-panel"><h3 style="color:var(--gold);">ASSET ANALYTICS</h3><div class="info-grid"><div class="info-card"><div class="info-label">TOTAL VALUE</div><div class="info-value" id="analyticsValue">$10,800,000</div></div><div class="info-card"><div class="info-label">GOLD</div><div class="info-value">9.5 Tons</div></div><div class="info-card"><div class="info-label">DIAMONDS</div><div class="info-value">2 Kilos</div></div><div class="info-card"><div class="info-label">APPRECIATION</div><div class="info-value">+342% since 1990</div></div></div><div class="progress-bar"><div class="progress-fill"></div></div><p>Vault Capacity: 78% | Next Audit: Q2 2026</p></div></div>
-                <div id="paymentsTab" class="tab-content"><div class="glass-panel"><h3 style="color:var(--gold);">PAYMENT HISTORY</h3><div id="paymentHistoryList"></div><div class="info-card" style="margin-top:15px;"><div class="info-label">OUTSTANDING</div><div class="info-value" id="outstandingBalance">$250.00</div><button class="btn-gold" style="margin-top:8px; padding:6px 12px;" onclick="alert('Contact beneficiary relations to pay $250')">Pay Now</button></div></div></div>
-                <div id="videosTab" class="tab-content"><div class="glass-panel"><h3 style="color:var(--gold);">VAULT VIDEOS</h3><div class="video-grid" id="videoLibrary"></div></div></div>
-                <div id="documentsTab" class="tab-content"><div class="glass-panel"><h3 style="color:var(--gold);">DOCUMENTS</h3><div class="doc-grid" id="docLibrary"></div></div></div>
-                <div id="beneficiariesTab" class="tab-content"><div class="glass-panel"><h3 style="color:var(--gold);">BENEFICIARIES</h3><div class="info-card"><div class="info-label">Primary</div><div class="info-value">Anna Williams (Donna)</div></div><div class="info-card"><div class="info-label">Secondary</div><div class="info-value">Unknown Husband</div></div><div class="info-card"><div class="info-label">Next of Kin</div><div class="info-value">Ann Mitchell Williams</div></div><div style="background:rgba(212,175,55,0.08); padding:12px; border-radius:16px; margin-top:12px;"><i class="fas fa-gavel"></i> 2 days notification required for collection.</div></div></div>
+
+                <div id="tabDashboard" class="tab-content active">
+                    <div class="info-grid" id="dashboardInfo"></div>
+                    <div class="glass-card"><div class="section-title"><i class="fas fa-sticky-note"></i> Official Remarks</div><p id="remarksText" style="font-size:0.8rem;"></p><p style="margin-top:8px;"><strong>Received with full proof of ownership.</strong><br>Director: MR-DAVIS CONOR</p></div>
+                </div>
+
+                <div id="tabAnalytics" class="tab-content">
+                    <div class="glass-card"><div class="section-title"><i class="fas fa-chart-pie"></i> Asset Analytics</div>
+                        <div class="info-card"><div class="info-label">Current Market Value</div><div class="info-value" id="analyticsValue">$10,800,000</div></div>
+                        <div class="info-card"><div class="info-label">Gold Holding</div><div class="info-value">9.5 Tons (304,000 oz)</div></div>
+                        <div class="info-card"><div class="info-label">Diamond Holding</div><div class="info-value">2 Kilograms (10,000 carats)</div></div>
+                        <div class="info-card"><div class="info-label">Appreciation</div><div class="info-value">+342% since 1990</div></div>
+                        <div style="height:4px; background:rgba(255,255,255,0.1); border-radius:10px; margin:12px 0;"><div style="width:78%; height:100%; background:var(--gold); border-radius:10px;"></div></div>
+                        <p style="font-size:0.7rem;">Vault Capacity: 78% | Next Audit: Q2 2026</p>
+                    </div>
+                </div>
+
+                <div id="tabPayments" class="tab-content">
+                    <div class="glass-card"><div class="section-title"><i class="fas fa-history"></i> Payment History</div>
+                        <div id="paymentHistoryList"></div>
+                        <div class="info-card" style="margin-top:12px;"><div class="info-label">Current Outstanding</div><div class="info-value" id="outstandingBalance">$250.00</div><button class="btn-gold" style="margin-top:8px; padding:6px 12px;" onclick="alert('Payment gateway: Contact beneficiary relations.')">Pay Now</button></div>
+                    </div>
+                </div>
+
+                <div id="tabVideos" class="tab-content">
+                    <div class="glass-card"><div class="section-title"><i class="fas fa-video"></i> Secure Videos</div>
+                        <div class="media-grid" id="videoGrid"></div>
+                    </div>
+                </div>
+
+                <div id="tabDocuments" class="tab-content">
+                    <div class="glass-card"><div class="section-title"><i class="fas fa-file-pdf"></i> Legal Documents</div>
+                        <div class="media-grid" id="docGrid"></div>
+                    </div>
+                </div>
+
+                <div id="tabBeneficiaries" class="tab-content">
+                    <div class="glass-card"><div class="section-title"><i class="fas fa-users"></i> Beneficiaries</div>
+                        <div class="info-card"><div class="info-label">Primary</div><div class="info-value">Anna Williams (Donna)</div></div>
+                        <div class="info-card"><div class="info-label">Secondary</div><div class="info-value">Unknown Husband of Anna Williams</div></div>
+                        <div class="info-card"><div class="info-label">Next of Kin</div><div class="info-value">Ann Mitchell Williams</div></div>
+                        <div style="background:rgba(212,175,55,0.08); padding:12px; border-radius:16px; margin-top:12px;"><i class="fas fa-gavel"></i> 2 days notification required for collection.</div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
-</div>
 
-<div id="videoModal" class="modal" onclick="if(event.target===this) closeVideoModal()"><div class="modal-content"><h3 id="modalVideoTitle">Video</h3><video id="modalVideoPlayer" controls style="width:100%;"></video><button onclick="closeVideoModal()" class="btn-outline" style="margin-top:10px;">Close</button></div></div>
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-overlay">
+        <div class="login-card">
+            <i class="fas fa-shield-alt" style="font-size:2rem; color:var(--gold);"></i>
+            <h2 style="margin:10px 0;">Estate Access</h2>
+            <input type="text" id="loginUser" placeholder="Client ID / Email">
+            <input type="password" id="loginPass" placeholder="Access Code">
+            <button class="btn-gold" id="doLoginBtn" style="width:100%;">ACCESS VAULT</button>
+            <div id="loginError" style="color:#e07c4c; font-size:0.7rem; margin-top:8px;"></div>
+            <div style="background:rgba(212,175,55,0.1); border-radius:12px; padding:10px; margin-top:12px; font-size:0.7rem;">
+                <strong>Demo:</strong> <code>william.johnson@estate.com</code><br><code>William1990</code>
+            </div>
+            <button id="closeLoginBtn" style="background:none; border:none; color:var(--text-muted); margin-top:10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Video Modal (with embedded demo videos) -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-modal-content">
+            <h3 id="videoModalTitle" style="color:var(--gold); margin-bottom:10px;">Video</h3>
+            <video id="videoPlayer" controls style="width:100%;"></video>
+            <button onclick="closeVideoModal()" class="btn-gold" style="margin-top:12px; padding:8px;">Close</button>
+        </div>
+    </div>
+
+    <!-- Document Modal (with inline preview) -->
+    <div id="docModal" class="doc-modal">
+        <div class="doc-modal-content">
+            <h3 id="docModalTitle" style="color:var(--gold); margin-bottom:10px;">Document</h3>
+            <div id="docPreview" class="doc-preview"></div>
+            <button onclick="closeDocModal()" class="btn-gold" style="margin-top:12px; padding:8px;">Close</button>
+        </div>
+    </div>
+</div>
 
 <script>
     // Depositor Data
@@ -722,121 +721,176 @@
         dateOfDeath: "1st January 1995", director: "MR-DAVIS CONOR",
         remarks: "In the absence of the Depositor, only the Beneficiaries / Next Of Kin has the mandate to claim the consignment at least two (2) days notification prior to collection."
     };
-    const videoAssets = [{ title: "1990 Deposit Entry", file: "video1.mp4" },{ title: "Gold Inspection", file: "video2.mp4" },{ title: "Beneficiary Brief", file: "video3.mp4" }];
-    const docAssets = [{ title: "Custody Agreement", file: "doc1.pdf" },{ title: "Beneficiary Dec.", file: "doc2.pdf" },{ title: "Asset Verification", file: "doc3.pdf" }];
-    const paymentHistory = [{ period: "Jan 1990 - Dec 2024", amount: "$102,000", status: "Paid" },{ period: "Jan 2025 - Feb 2026", amount: "$3,500", status: "Pending" }];
+
+    // Embedded video data (demo videos - using sample videos from the web that will work)
+    const videoAssets = [
+        { title: "1990 VAULT DEPOSIT ENTRY", url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4", type: "video" },
+        { title: "GOLD RESERVE INSPECTION", url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_2mb.mp4", type: "video" },
+        { title: "BENEFICIARY CLAIM BRIEFING", url: "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_3mb.mp4", type: "video" }
+    ];
+
+    // Embedded document content (inline preview)
+    const docAssets = [
+        { title: "CUSTODY AGREEMENT 1990", content: "GOLD SHIELD VAULT - CUSTODY AGREEMENT\n\nDate: March 5, 1990\nDepositor: William Johnson\nAsset: 9.5 tons of Gold Bullion + 2 kilograms of Diamonds\nStorage Location: Zürich Private Vault, Switzerland\nMonthly Custody Fee: $250 USD\nTerms: Assets to be released only to Beneficiary/Next of Kin with 2 days notice.\n\nSigned,\nWilliam Johnson (Depositor)\nMR-DAVIS CONOR (Director)" },
+        { title: "BENEFICIARY DECLARATION", content: "BENEFICIARY DECLARATION\n\nPrimary Beneficiary: Anna Williams (Donna)\nSecondary Beneficiary: Unknown Husband of Anna Williams\nNext of Kin: Ann Mitchell Williams\n\nIn the event of the Depositor's passing, all assets shall transfer to the named beneficiaries. Accumulated custody fees shall be paid upon collection.\n\nNotarized: January 15, 1990" },
+        { title: "ASSET VERIFICATION CERTIFICATE", content: "ASSET VERIFICATION CERTIFICATE\n\nCertificate #: GSV-421-1990\nDepositor: William Johnson\nVerified Assets:\n- Gold Bullion: 9.5 tons (304,000 troy ounces) .9999 purity\n- Diamonds: 2 kilograms (10,000 carats) graded VS1\n\nAppraised Value (1990): $2,450,000 USD\nCurrent Market Value (2026): $10,800,000 USD\n\nAudited by: Swiss Precious Metals Authority" }
+    ];
+
+    const paymentHistory = [
+        { period: "Jan 1990 - Dec 2024 (34 years)", amount: "$102,000", status: "Paid by Estate" },
+        { period: "Jan 2025 - Feb 2026", amount: "$3,500", status: "Pending - Beneficiary" }
+    ];
 
     function loadDashboard() {
         const fields = [
             {label:"DEPOSITOR", value:depositor.name},{label:"NATIONALITY", value:depositor.nationality},{label:"HOMETOWN", value:depositor.hometown},
-            {label:"DEPOSIT DATE", value:depositor.depositDate},{label:"ITEM", value:depositor.itemDeposit},{label:"CONTENT", value:depositor.content},
-            {label:"TRANSACTION CODE", value:depositor.transactionCode},{label:"REGISTRATION", value:depositor.registrationNumber},{label:"MONTHLY", value:depositor.monthlyCharges}
+            {label:"DEPOSIT DATE", value:depositor.depositDate},{label:"ITEM DEPOSIT", value:depositor.itemDeposit},{label:"CONTENT", value:depositor.content},
+            {label:"TRANSACTION CODE", value:depositor.transactionCode},{label:"REGISTRATION", value:depositor.registrationNumber},{label:"MONTHLY CHARGE", value:depositor.monthlyCharges},
+            {label:"PROPERTIES", value:depositor.properties},{label:"DATE STORED", value:depositor.dateStored},{label:"COUNTRY", value:depositor.country},
+            {label:"OWNER DOB", value:depositor.ownerDob},{label:"DATE OF DEATH", value:depositor.dateOfDeath},{label:"DIRECTOR", value:depositor.director}
         ];
         document.getElementById("dashboardInfo").innerHTML = fields.map(f => `<div class="info-card"><div class="info-label">${f.label}</div><div class="info-value">${f.value}</div></div>`).join('');
         document.getElementById("remarksText").innerHTML = depositor.remarks;
         document.getElementById("displayClientName").innerHTML = depositor.name;
-        document.getElementById("analyticsValue").innerHTML = "$10,800,000 (Current)";
-        document.getElementById("outstandingBalance").innerHTML = "$250.00";
-        document.getElementById("paymentHistoryList").innerHTML = paymentHistory.map(p => `<div class="payment-item"><span><strong>${p.period}</strong><br><span style="font-size:0.7rem;">${p.status}</span></span><span style="color:var(--gold);">${p.amount}</span></div>`).join('');
+        document.getElementById("analyticsValue").innerHTML = "$10,800,000 (Current Market)";
+        document.getElementById("outstandingBalance").innerHTML = "$250.00 (March 2026)";
+        let paymentHtml = paymentHistory.map(p => `<div class="payment-item"><span><strong>${p.period}</strong><br><span style="font-size:0.65rem;">${p.status}</span></span><span style="color:var(--gold);">${p.amount}</span></div>`).join('');
+        document.getElementById("paymentHistoryList").innerHTML = paymentHtml;
     }
-    function renderVideoLibrary() { document.getElementById("videoLibrary").innerHTML = videoAssets.map(v => `<div class="video-card" onclick="openVideoModal('${v.file}','${v.title}')"><div class="video-thumb"><i class="fas fa-play-circle"></i></div><div style="padding:12px;"><strong>${v.title}</strong><button class="btn-outline" style="margin-top:8px; padding:5px 10px;">PLAY</button></div></div>`).join(''); }
-    function renderDocLibrary() { document.getElementById("docLibrary").innerHTML = docAssets.map(d => `<div class="doc-card" onclick="openDocumentModal('${d.file}','${d.title}')"><div class="video-thumb"><i class="fas fa-file-pdf"></i></div><div style="padding:12px;"><strong>${d.title}</strong><button class="btn-outline" style="margin-top:8px; padding:5px 10px;">VIEW</button></div></div>`).join(''); }
-    
-    window.openVideoModal = (file,title) => { let m=document.getElementById("videoModal"), v=document.getElementById("modalVideoPlayer"); v.src=file; v.load(); document.getElementById("modalVideoTitle").innerText=title; m.style.display="flex"; v.play().catch(e=>alert(`Video "${file}" not found.`)); };
-    window.closeVideoModal = () => { let m=document.getElementById("videoModal"), v=document.getElementById("modalVideoPlayer"); v.pause(); v.src=""; m.style.display="none"; };
-    window.openDocumentModal = (file,title) => { alert(`Document "${file}" would open. Place ${file} in folder.`); };
-    
-    // ========== KEY FEATURE: Menu disappears when tapping a page, shows content ==========
+
+    function renderVideoLibrary() {
+        document.getElementById("videoGrid").innerHTML = videoAssets.map(v => `
+            <div class="media-card" onclick="openVideoModal('${v.url}','${v.title}')">
+                <i class="fas fa-play-circle"></i>
+                <p style="font-size:0.7rem; margin-top:6px;"><strong>${v.title}</strong></p>
+            </div>
+        `).join('');
+    }
+
+    function renderDocLibrary() {
+        document.getElementById("docGrid").innerHTML = docAssets.map(d => `
+            <div class="media-card" onclick="openDocumentModal('${d.content.replace(/'/g, "\\'")}','${d.title}')">
+                <i class="fas fa-file-pdf"></i>
+                <p style="font-size:0.7rem; margin-top:6px;"><strong>${d.title}</strong></p>
+            </div>
+        `).join('');
+    }
+
+    window.openVideoModal = (url, title) => {
+        let modal = document.getElementById("videoModal");
+        let player = document.getElementById("videoPlayer");
+        document.getElementById("videoModalTitle").innerText = title;
+        player.src = url;
+        player.load();
+        modal.style.display = "flex";
+        player.play().catch(e => console.log("autoplay blocked"));
+    };
+
+    window.closeVideoModal = () => {
+        let modal = document.getElementById("videoModal");
+        let player = document.getElementById("videoPlayer");
+        player.pause();
+        player.src = "";
+        modal.style.display = "none";
+    };
+
+    window.openDocumentModal = (content, title) => {
+        let modal = document.getElementById("docModal");
+        document.getElementById("docModalTitle").innerText = title;
+        document.getElementById("docPreview").innerHTML = `<pre style="white-space:pre-wrap; font-family:monospace; font-size:0.7rem;">${escapeHtml(content)}</pre>`;
+        modal.style.display = "flex";
+    };
+
+    function escapeHtml(text) {
+        return text.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    window.closeDocModal = () => {
+        document.getElementById("docModal").style.display = "none";
+        document.getElementById("docPreview").innerHTML = "";
+    };
+
+    // Sidebar auto-hide on menu tap
     const sidebar = document.getElementById('dashboardSidebar');
     const openBtn = document.getElementById('openSidebarBtn');
     const closeBtn = document.getElementById('closeSidebarBtn');
-    
+
     function closeSidebarMenu() {
         if (sidebar) {
             sidebar.classList.add('closed');
             document.body.classList.add('sidebar-closed');
         }
     }
-    
+
     function openSidebarMenu() {
         if (sidebar) {
             sidebar.classList.remove('closed');
             document.body.classList.remove('sidebar-closed');
         }
     }
-    
-    // Navigate to tab: close menu, then switch tab
+
     window.navigateToTab = function(tab) {
-        // First close the sidebar menu
         closeSidebarMenu();
-        // Then switch to the selected tab
         setTimeout(() => {
-            switchTab(tab);
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
+            document.querySelectorAll('.sidebar-nav li').forEach(l => l.classList.remove('active'));
+            const targetLi = document.querySelector(`.sidebar-nav li[data-tab="${tab}"]`);
+            if (targetLi) targetLi.classList.add('active');
         }, 150);
-    }
-    
-    function switchTab(tab) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.getElementById(`${tab}Tab`).classList.add('active');
-        document.querySelectorAll('.sidebar-nav li').forEach(l => l.classList.remove('active'));
-        const targetLi = document.querySelector(`.sidebar-nav li[data-tab="${tab}"]`);
-        if (targetLi) targetLi.classList.add('active');
-    }
-    
+    };
+
     if (openBtn) openBtn.onclick = openSidebarMenu;
     if (closeBtn) closeBtn.onclick = closeSidebarMenu;
-    
-    // Initialize sidebar as visible on desktop but we start closed for better mobile experience
+
+    // Start with sidebar closed
     if (sidebar) {
         sidebar.classList.add('closed');
         document.body.classList.add('sidebar-closed');
     }
-    
-    // Login logic
-    document.getElementById("showLoginBtn").onclick = () => document.getElementById("loginOverlay").style.display = "flex";
-    document.getElementById("closeLoginModalBtn").onclick = () => document.getElementById("loginOverlay").style.display = "none";
+
+    // Login Logic
+    document.getElementById("showLoginBtn").onclick = () => document.getElementById("loginModal").style.display = "flex";
+    document.getElementById("closeLoginBtn").onclick = () => document.getElementById("loginModal").style.display = "none";
     document.getElementById("doLoginBtn").onclick = () => {
         let email = document.getElementById("loginUser").value.trim();
         let pwd = document.getElementById("loginPass").value;
-        if(email === "william.johnson@estate.com" && pwd === "William1990") {
-            document.getElementById("loginOverlay").style.display = "none";
-            document.getElementById("landingPage").style.display = "none";
-            document.getElementById("dashboardMain").style.display = "block";
+        if (email === "william.johnson@estate.com" && pwd === "William1990") {
+            document.getElementById("loginModal").style.display = "none";
+            document.getElementById("landingContent").style.display = "none";
+            document.getElementById("dashboardContent").style.display = "block";
             loadDashboard();
             renderVideoLibrary();
             renderDocLibrary();
-            switchTab('dashboard');
-            // Keep sidebar closed initially
-            if (sidebar) {
-                sidebar.classList.add('closed');
-                document.body.classList.add('sidebar-closed');
-            }
+            closeSidebarMenu();
         } else {
             document.getElementById("loginError").innerText = "Invalid credentials. Use: william.johnson@estate.com / William1990";
         }
     };
     document.getElementById("logoutBtnSidebar").onclick = () => {
-        document.getElementById("dashboardMain").style.display = "none";
-        document.getElementById("landingPage").style.display = "block";
-        document.getElementById("loginOverlay").style.display = "flex";
+        document.getElementById("dashboardContent").style.display = "none";
+        document.getElementById("landingContent").style.display = "block";
+        document.getElementById("loginModal").style.display = "flex";
+        document.getElementById("loginUser").value = "";
+        document.getElementById("loginPass").value = "";
     };
-    
-    // Navbar auto-hide logic
-    const navbar = document.getElementById('mainNavbar');
-    let navbarTimeout;
-    function showNavbar() { if(navbar) navbar.classList.remove('navbar-hidden'); resetNavbarTimer(); }
-    function resetNavbarTimer() { if(navbarTimeout) clearTimeout(navbarTimeout); navbarTimeout = setTimeout(() => { if(navbar) navbar.classList.add('navbar-hidden'); }, 3000); }
-    document.getElementById('navbarRevealZone')?.addEventListener('mouseenter', showNavbar);
-    if(navbar) navbar.addEventListener('mouseenter', showNavbar);
-    document.addEventListener('click', showNavbar);
-    showNavbar();
-    
-    // Mobile nav toggle
-    document.getElementById('navToggleBtn')?.addEventListener('click', () => document.getElementById('navLinks')?.classList.toggle('show'));
-    function scrollToSection(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); if(document.getElementById('navLinks')) document.getElementById('navLinks').classList.remove('show'); }
-    
+
     // Particles
-    for(let i=0;i<40;i++){ let p=document.createElement('div'); p.className='particle'; p.style.width=Math.random()*4+1+'px'; p.style.height=p.style.width; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*20+'s'; p.style.animationDuration=Math.random()*15+8+'s'; document.querySelector('.particles').appendChild(p); }
+    for (let i = 0; i < 40; i++) {
+        let p = document.createElement('div');
+        p.className = 'particle';
+        p.style.width = Math.random() * 4 + 1 + 'px';
+        p.style.height = p.style.width;
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 15 + 's';
+        p.style.animationDuration = Math.random() * 15 + 8 + 's';
+        document.querySelector('.particles').appendChild(p);
+    }
 </script>
 </body>
 </html>
