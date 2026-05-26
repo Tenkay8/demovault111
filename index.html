@@ -27,18 +27,29 @@
 
         body {
             font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background: var(--darker);
+            background: radial-gradient(circle at top, #111419 0%, #05070c 55%, #020305 100%);
             color: var(--text-light);
             overflow-x: hidden;
+            min-height: 100vh;
+            padding: 24px 12px 32px;
+        }
+
+        .page-shell {
+            position: relative;
+            max-width: 520px;
+            margin: 0 auto;
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(212,175,55,0.08);
+            box-shadow: 0 40px 110px rgba(0,0,0,0.55);
+            background: rgba(8,10,16,0.96);
+            backdrop-filter: blur(10px);
         }
 
         /* Landing Page Styles with Animation */
         .hero-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            inset: 0;
             z-index: -2;
             background: radial-gradient(circle at 20% 30%, #11161f, #05070c);
         }
@@ -46,11 +57,11 @@
         .hero-bg::before {
             content: '';
             position: absolute;
-            width: 200%;
-            height: 200%;
-            top: -50%;
-            left: -50%;
-            background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);
+            width: 180%;
+            height: 180%;
+            top: -40%;
+            left: -40%;
+            background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 68%);
             animation: rotate 40s linear infinite;
         }
 
@@ -61,11 +72,8 @@
 
         /* Floating particles animation */
         .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            inset: 0;
             z-index: -1;
             pointer-events: none;
         }
@@ -86,21 +94,21 @@
 
         /* ========== AUTO-HIDING NAVBAR ========== */
         .navbar {
-            position: fixed;
+            position: sticky;
             top: 0;
             left: 0;
             right: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
+            padding: 1rem 1.25rem;
             z-index: 1000;
-            background: rgba(5, 7, 12, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-glow);
+            background: rgba(7, 10, 16, 0.96);
+            backdrop-filter: blur(28px);
+            border-bottom: 1px solid rgba(212,175,55,0.15);
             flex-wrap: wrap;
             gap: 1rem;
-            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: transform 0.25s ease;
             transform: translateY(0);
         }
 
@@ -193,16 +201,16 @@
         }
 
         .hero {
-            min-height: 100vh;
+            min-height: calc(100vh - 140px);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 6rem 2rem 2rem;
+            padding: 5rem 1.75rem 2.5rem;
         }
 
         .hero-content h1 {
-            font-size: 4rem;
+            font-size: 3.4rem;
             font-weight: 700;
             background: linear-gradient(135deg, #fff, var(--gold));
             -webkit-background-clip: text;
@@ -626,6 +634,49 @@
             border-color: var(--gold);
         }
 
+        .bottom-nav {
+            display: none;
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(6, 9, 16, 0.98);
+            border-top: 1px solid rgba(212,175,55,0.12);
+            backdrop-filter: blur(20px);
+            padding: 0.65rem 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .bottom-nav button {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(212,175,55,0.14);
+            color: var(--text-light);
+            border-radius: 18px;
+            padding: 12px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.18s ease, background 0.18s ease;
+        }
+
+        .bottom-nav button:hover {
+            background: rgba(212,175,55,0.12);
+            transform: translateY(-1px);
+        }
+
+        .bottom-nav button i {
+            font-size: 1.1rem;
+            color: var(--gold);
+        }
+
         .tab-content {
             display: none;
         }
@@ -897,6 +948,15 @@
             .login-card {
                 border-radius: 28px;
             }
+
+            .bottom-nav {
+                display: flex;
+            }
+
+            .page-shell {
+                border-radius: 24px;
+                box-shadow: 0 26px 90px rgba(0,0,0,0.55);
+            }
         }
     </style>
 </head>
@@ -908,7 +968,7 @@
 <div class="sidebar-reveal-zone" id="sidebarRevealZone"></div>
 <div class="sidebar-hidden-indicator" id="sidebarIndicator"></div>
 
-<div id="landingPage">
+<div id="landingPage" class="page-shell">
     <div class="hero-bg"></div>
     <div class="particles" id="particles"></div>
     
@@ -979,6 +1039,13 @@
     </section>
 
     <footer class="footer"><div class="footer-grid"><div><h3>Gold Shield Vault</h3><p>Est. 1989 | Swiss Depository License #GSV-421</p></div><div><h4>Legal</h4><p>Terms of Custody</p><p>Privacy & Security</p><p>Regulatory Disclosures</p></div><div><h4>Accreditations</h4><p>FINMA Regulated</p><p>ISO 27001 Certified</p><p>LBMA Good Delivery</p></div></div><div class="footer-bottom" style="text-align:center; margin-top:2rem;"><p>© 2026 Gold Shield Vault AG. All rights reserved.</p></div></footer>
+    <div class="bottom-nav">
+        <button onclick="scrollToSection('home')"><i class="fas fa-home"></i>Home</button>
+        <button onclick="scrollToSection('about')"><i class="fas fa-info-circle"></i>About</button>
+        <button onclick="scrollToSection('services')"><i class="fas fa-briefcase"></i>Services</button>
+        <button onclick="scrollToSection('blog')"><i class="fas fa-lightbulb"></i>Insights</button>
+        <button onclick="scrollToSection('contact')"><i class="fas fa-envelope"></i>Contact</button>
+    </div>
 </div>
 
 <!-- LOGIN MODAL -->
@@ -1000,7 +1067,7 @@
 </div>
 
 <!-- DASHBOARD WITH AUTO-HIDING SIDEBAR -->
-<div id="dashboardMain" style="display: none;">
+<div id="dashboardMain" class="page-shell" style="display: none;">
     <div class="dashboard-wrapper">
         <aside class="sidebar" id="dashboardSidebar">
             <div style="display:flex; justify-content:space-between; padding:28px 20px 24px 24px; border-bottom:1px solid var(--border-glow);">
@@ -1037,13 +1104,17 @@
 
     function showNavbar() { if (navbar) { navbar.classList.remove('navbar-hidden'); } resetNavbarTimer(); }
     function hideNavbar() { if (navbar) { navbar.classList.add('navbar-hidden'); } }
-    function resetNavbarTimer() { if (navbarHideTimeout) clearTimeout(navbarHideTimeout); navbarHideTimeout = setTimeout(() => { hideNavbar(); }, 3000); }
+    function resetNavbarTimer() { if (navbarHideTimeout) clearTimeout(navbarHideTimeout); navbarHideTimeout = setTimeout(() => { hideNavbar(); }, 500); }
     if (revealZone) { revealZone.addEventListener('mouseenter', showNavbar); revealZone.addEventListener('touchstart', showNavbar); }
     if (navbar) { navbar.addEventListener('mouseenter', showNavbar); navbar.addEventListener('touchstart', showNavbar); }
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => { if (window.scrollY < lastScrollY && window.scrollY < 100) showNavbar(); lastScrollY = window.scrollY; });
-    document.addEventListener('click', showNavbar);
-    document.addEventListener('touchstart', showNavbar);
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.navbar') || e.target.closest('.nav-toggle')) showNavbar();
+    });
+    document.addEventListener('touchstart', (e) => {
+        if (e.target.closest('.navbar') || e.target.closest('.nav-toggle')) showNavbar();
+    });
     showNavbar();
 
     const navToggleBtn = document.getElementById('navToggleBtn');
