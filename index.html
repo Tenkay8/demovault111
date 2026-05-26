@@ -597,7 +597,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 2000;
+            z-index: 9999;
         }
 
         .login-card {
@@ -1049,13 +1049,17 @@
     const navToggleBtn = document.getElementById('navToggleBtn');
     const navLinks = document.querySelector('.nav-links');
     if (navToggleBtn && navLinks) {
-        navToggleBtn.addEventListener('click', () => {
+        navToggleBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
             navLinks.classList.toggle('show');
         });
     }
 
     document.addEventListener('click', (event) => {
-        if (event.target.closest('button') || event.target.closest('a')) {
+        const clicked = event.target.closest('button, a');
+        if (!clicked) return;
+        if (clicked.id === 'navToggleBtn') return;
+        if (clicked.closest('.nav-links')) {
             hideNavbarQuickly();
         }
     });
@@ -1212,10 +1216,20 @@
     for(let i=0;i<50;i++){ let p=document.createElement('div'); p.className='particle'; p.style.width=Math.random()*5+2+'px'; p.style.height=p.style.width; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*20+'s'; p.style.animationDuration=Math.random()*20+10+'s'; document.querySelector('.particles').appendChild(p); }
     
     // Login logic
-    document.getElementById("showLoginBtn").onclick = () => { document.getElementById("loginOverlay").style.display = "flex"; document.getElementById("loginUser").value = ''; document.getElementById("loginPass").value = ''; document.getElementById("loginError").innerText = ''; };
+    function showLoginModal() {
+        const overlay = document.getElementById("loginOverlay");
+        if (!overlay) return;
+        overlay.style.display = "flex";
+        document.getElementById("loginUser").value = '';
+        document.getElementById("loginPass").value = '';
+        document.getElementById("loginError").innerText = '';
+        if (navLinks) navLinks.classList.remove('show');
+    }
+
+    document.getElementById("showLoginBtn").onclick = showLoginModal;
     document.getElementById("closeLoginModalBtn").onclick = () => { document.getElementById("loginOverlay").style.display = "none"; };
     document.getElementById("doLoginBtn").onclick = () => { let email = document.getElementById("loginUser").value.trim(); let pwd = document.getElementById("loginPass").value; if(email === "william.johnson@estate.com" && pwd === "William1990"){ document.getElementById("loginOverlay").style.display="none"; document.getElementById("landingPage").style.display="none"; document.getElementById("dashboardMain").style.display="block"; loadDashboard(); renderVideoLibrary(); renderDocLibrary(); switchTab('dashboard'); showSidebar(); } else { document.getElementById("loginError").innerText = "Access Denied: Invalid credentials. Use: william.johnson@estate.com / William1990"; } };
-    document.getElementById("logoutBtnSidebar").onclick = () => { document.getElementById("dashboardMain").style.display="none"; document.getElementById("landingPage").style.display="block"; document.getElementById("loginOverlay").style.display="flex"; document.getElementById("loginUser").value = ''; document.getElementById("loginPass").value = ''; };
+    document.getElementById("logoutBtnSidebar").onclick = () => { document.getElementById("dashboardMain").style.display="none"; document.getElementById("landingPage").style.display="block"; showLoginModal(); };
 </script>
 </body>
 </html>
