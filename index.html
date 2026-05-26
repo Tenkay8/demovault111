@@ -1104,7 +1104,7 @@
 
     function showNavbar() { if (navbar) { navbar.classList.remove('navbar-hidden'); } resetNavbarTimer(); }
     function hideNavbar() { if (navbar) { navbar.classList.add('navbar-hidden'); } }
-    function resetNavbarTimer() { if (navbarHideTimeout) clearTimeout(navbarHideTimeout); navbarHideTimeout = setTimeout(() => { hideNavbar(); }, 500); }
+    function resetNavbarTimer() { if (navbarHideTimeout) clearTimeout(navbarHideTimeout); navbarHideTimeout = setTimeout(() => { hideNavbar(); }, 1500); }
     if (revealZone) { revealZone.addEventListener('mouseenter', showNavbar); revealZone.addEventListener('touchstart', showNavbar); }
     if (navbar) { navbar.addEventListener('mouseenter', showNavbar); navbar.addEventListener('touchstart', showNavbar); }
     let lastScrollY = window.scrollY;
