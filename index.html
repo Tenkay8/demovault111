@@ -750,9 +750,8 @@
         <button class="btn-gold" id="doLoginBtn" style="width:100%;">ACCESS VAULT</button>
         <div id="loginError" class="error-msg" style="color:#e07c4c; margin-top:10px;"></div>
         <div class="login-demo-hint">
-            <strong><i class="fas fa-info-circle"></i> Demo Credentials:</strong><br>
-            Email: <code>william.johnson@estate.com</code><br>
-            Password: <code>William1990</code>
+            <strong><i class="fas fa-info-circle"></i> Enter Your Credentials:</strong><br>
+            
         </div>
         <button id="closeLoginModalBtn" style="background:none; border:none; color:var(--text-muted); margin-top:1rem; cursor:pointer;">Cancel</button>
     </div>
@@ -917,7 +916,7 @@
         document.getElementById("dashboardInfo").innerHTML = fields.map(f => `<div class="info-card"><div class="info-label">${f.label}</div><div class="info-value">${f.value}</div></div>`).join('');
         document.getElementById("remarksText").innerHTML = depositor.remarks;
         document.getElementById("displayClientName").innerHTML = depositor.name;
-        document.getElementById("analyticsValue").innerHTML = "$10,800,000 (Current Market Value)";
+        document.getElementById("analyticsValue").innerHTML = "$1,500,000 000 (Current Market Value)";
         document.getElementById("appreciationValue").innerHTML = "+342% since 1990 (Gold: $385/oz to $1,700/oz)";
         document.getElementById("outstandingBalance").innerHTML = "$250.00 (Current Month - March 2026)";
         let paymentHtml = paymentHistory.map(p => `<div class="payment-item"><span><strong>${p.date}</strong><br><span style="font-size:0.8rem;">${p.status}</span></span><span style="color:var(--gold);">${p.amount}</span></div>`).join('');
