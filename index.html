@@ -264,6 +264,11 @@
             transform: translateX(-50%);
         }
 
+        .section.highlight {
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.22);
+            transition: box-shadow 0.3s ease;
+        }
+
         .about-grid, .services-grid, .blog-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1049,6 +1054,12 @@
         });
     }
 
+    document.addEventListener('click', (event) => {
+        if (event.target.closest('button') || event.target.closest('a')) {
+            hideNavbarQuickly();
+        }
+    });
+
     // ========== AUTO-HIDING DASHBOARD SIDEBAR (3 seconds) ==========
     const dashboardSidebar = document.getElementById('dashboardSidebar');
     const sidebarRevealZone = document.getElementById('sidebarRevealZone');
@@ -1173,15 +1184,29 @@
     }
     
     function renderDocLibrary() { 
-        document.getElementById("docLibrary").innerHTML = docAssets.map(d => `<div class="doc-card" onclick="openDocumentModal('${d.file}','${d.title}')"><div class="video-thumb"><i class="fas fa-file-pdf"></i></div><div style="padding:15px;"><strong>${d.title}</strong><p style="font-size:0.7rem; margin-top:5px;">${d.desc}</p><button class="btn-outline" style="margin-top:10px;">VIEW DOCUMENT</button></div></div>`).join(''); 
+        document.getElementById("docLibrary").innerHTML = docAssets.map(d => `<div class="doc-card"><div class="video-thumb"><i class="fas fa-file-pdf"></i></div><div style="padding:15px;"><strong>${d.title}</strong><p style="font-size:0.7rem; margin-top:5px;">${d.desc}</p><div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:10px;"><button class="btn-outline" onclick="openDocumentModal('${d.file}','${d.title}')">VIEW DOCUMENT</button><a class="btn-outline" href="${d.file}" download>DOWNLOAD PDF</a></div></div></div>`).join(''); 
     }
     
+    function hideNavbarQuickly() {
+        if (!navbar) return;
+        if (navLinks) navLinks.classList.remove('show');
+        setTimeout(() => {
+            navbar.classList.add('navbar-hidden');
+        }, 500);
+    }
+
+    function highlightSection(section) {
+        if (!section) return;
+        section.classList.add('highlight');
+        setTimeout(() => section.classList.remove('highlight'), 1400);
+    }
+
     window.openVideoModal = (file,title) => { let m=document.getElementById("videoModal"), v=document.getElementById("modalVideoPlayer"); v.src=file; v.load(); document.getElementById("modalVideoTitle").innerText=title; m.style.display="flex"; v.play().catch(e=>alert(`Video file "${file}" not found. Please ensure video1-3.mp4 are in the same directory.`)); };
     window.closeVideoModal = () => { let m=document.getElementById("videoModal"), v=document.getElementById("modalVideoPlayer"); v.pause(); v.src=""; m.style.display="none"; };
     window.openDocumentModal = (file,title) => { let m=document.getElementById("docModal"), ifr=document.getElementById("docIframe"); ifr.src=file; document.getElementById("modalDocTitle").innerText=title; m.style.display="flex"; ifr.onerror=()=>alert(`Document "${file}" not found. Please ensure doc1-3.pdf are in the same directory.`); };
     window.closeDocModal = () => { document.getElementById("docModal").style.display="none"; document.getElementById("docIframe").src=""; };
     window.switchTab = (tab) => { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.getElementById(`${tab}Tab`).classList.add('active'); document.querySelectorAll('.sidebar-nav li').forEach(l=>l.classList.remove('active')); document.querySelector(`li[data-tab="${tab}"]`)?.classList.add('active'); showSidebar(); };
-    function scrollToSection(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); showNavbar(); if(navLinks?.classList.contains('show')) navLinks.classList.remove('show'); }
+    function scrollToSection(id) { const section = document.getElementById(id); if (section) { section.scrollIntoView({behavior:'smooth', block:'start'}); highlightSection(section); } showNavbar(); if(navLinks?.classList.contains('show')) navLinks.classList.remove('show'); hideNavbarQuickly(); }
     
     // Particles
     for(let i=0;i<50;i++){ let p=document.createElement('div'); p.className='particle'; p.style.width=Math.random()*5+2+'px'; p.style.height=p.style.width; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*20+'s'; p.style.animationDuration=Math.random()*20+10+'s'; document.querySelector('.particles').appendChild(p); }
