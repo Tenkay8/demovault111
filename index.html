@@ -677,6 +677,67 @@
             color: var(--gold);
         }
 
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.86);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            text-align: center;
+            padding: 1.5rem;
+            z-index: 99999;
+        }
+
+        .page-loader.active {
+            display: flex;
+        }
+
+        .page-loader .loader-box {
+            width: min(320px, 100%);
+            background: rgba(8, 10, 16, 0.96);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 24px;
+            padding: 28px 24px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+        }
+
+        .page-loader .loader-spinner {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 18px;
+            border: 6px solid rgba(212,175,55,0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.95s linear infinite;
+        }
+
+        .page-loader h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .page-loader p {
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .tab-content {
+            background: rgba(212,175,55,0.12);
+            transform: translateY(-1px);
+        }
+
+        .bottom-nav button i {
+            font-size: 1.1rem;
+            color: var(--gold);
+        }
+
         .tab-content {
             display: none;
         }
@@ -1047,6 +1108,7 @@
         <button onclick="scrollToSection('contact')"><i class="fas fa-envelope"></i>Contact</button>
     </div>
 </div>
+<div id="pageLoader" class="page-loader"><div class="loader-box"><div class="loader-spinner"></div><h3>Loading page...</h3><p>Preparing your selected section. This should take about 2 seconds.</p></div></div>
 
 <!-- LOGIN MODAL -->
 <div id="loginOverlay" class="login-overlay">
@@ -1104,7 +1166,7 @@
 
     function showNavbar() { if (navbar) { navbar.classList.remove('navbar-hidden'); } resetNavbarTimer(); }
     function hideNavbar() { if (navbar) { navbar.classList.add('navbar-hidden'); } }
-    function resetNavbarTimer() { if (navbarHideTimeout) clearTimeout(navbarHideTimeout); navbarHideTimeout = setTimeout(() => { hideNavbar(); }, 1500); }
+    function resetNavbarTimer() { if (navbarHideTimeout) clearTimeout(navbarHideTimeout); }
     if (revealZone) { revealZone.addEventListener('mouseenter', showNavbar); revealZone.addEventListener('touchstart', showNavbar); }
     if (navbar) { navbar.addEventListener('mouseenter', showNavbar); navbar.addEventListener('touchstart', showNavbar); }
     let lastScrollY = window.scrollY;
@@ -1135,7 +1197,7 @@
         }
     });
 
-    // ========== AUTO-HIDING DASHBOARD SIDEBAR (3 seconds) ==========
+    // ========== AUTO-HIDING DASHBOARD SIDEBAR (disabled) ==========
     const dashboardSidebar = document.getElementById('dashboardSidebar');
     const sidebarRevealZone = document.getElementById('sidebarRevealZone');
     const sidebarIndicator = document.getElementById('sidebarIndicator');
@@ -1165,9 +1227,6 @@
 
     function resetSidebarTimer() {
         if (sidebarHideTimeout) clearTimeout(sidebarHideTimeout);
-        sidebarHideTimeout = setTimeout(() => {
-            hideSidebar();
-        }, 3000);
     }
 
     // Show sidebar when hovering over left edge or indicator
@@ -1263,11 +1322,19 @@
     }
     
     function hideNavbarQuickly() {
-        if (!navbar) return;
         if (navLinks) navLinks.classList.remove('show');
-        setTimeout(() => {
-            navbar.classList.add('navbar-hidden');
-        }, 500);
+    }
+
+    function showPageLoader() {
+        const loader = document.getElementById('pageLoader');
+        if (!loader) return;
+        loader.classList.add('active');
+    }
+
+    function hidePageLoader() {
+        const loader = document.getElementById('pageLoader');
+        if (!loader) return;
+        loader.classList.remove('active');
     }
 
     function highlightSection(section) {
@@ -1280,8 +1347,18 @@
     window.closeVideoModal = () => { let m=document.getElementById("videoModal"), v=document.getElementById("modalVideoPlayer"); v.pause(); v.src=""; m.style.display="none"; };
     window.openDocumentModal = (file,title) => { let m=document.getElementById("docModal"), ifr=document.getElementById("docIframe"); ifr.src=file; document.getElementById("modalDocTitle").innerText=title; m.style.display="flex"; ifr.onerror=()=>alert(`Document "${file}" not found. Please ensure doc1-3.pdf are in the same directory.`); };
     window.closeDocModal = () => { document.getElementById("docModal").style.display="none"; document.getElementById("docIframe").src=""; };
-    window.switchTab = (tab) => { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.getElementById(`${tab}Tab`).classList.add('active'); document.querySelectorAll('.sidebar-nav li').forEach(l=>l.classList.remove('active')); document.querySelector(`li[data-tab="${tab}"]`)?.classList.add('active'); showSidebar(); };
-    function scrollToSection(id) { const section = document.getElementById(id); if (section) { section.scrollIntoView({behavior:'smooth', block:'start'}); highlightSection(section); } showNavbar(); if(navLinks?.classList.contains('show')) navLinks.classList.remove('show'); hideNavbarQuickly(); }
+    window.switchTab = (tab) => {
+        showPageLoader();
+        setTimeout(() => {
+            document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+            document.getElementById(`${tab}Tab`).classList.add('active');
+            document.querySelectorAll('.sidebar-nav li').forEach(l=>l.classList.remove('active'));
+            document.querySelector(`li[data-tab="${tab}"]`)?.classList.add('active');
+            showSidebar();
+            hidePageLoader();
+        }, 2000);
+    };
+    function scrollToSection(id) { const section = document.getElementById(id); if (section) { showPageLoader(); setTimeout(() => { section.scrollIntoView({behavior:'smooth', block:'start'}); highlightSection(section); hidePageLoader(); }, 2000); } showNavbar(); if(navLinks?.classList.contains('show')) navLinks.classList.remove('show'); hideNavbarQuickly(); }
     
     // Particles
     for(let i=0;i<50;i++){ let p=document.createElement('div'); p.className='particle'; p.style.width=Math.random()*5+2+'px'; p.style.height=p.style.width; p.style.left=Math.random()*100+'%'; p.style.animationDelay=Math.random()*20+'s'; p.style.animationDuration=Math.random()*20+10+'s'; document.querySelector('.particles').appendChild(p); }
